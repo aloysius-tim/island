@@ -34,8 +34,6 @@ public class LocationStrategy extends DroneStrategy {
         this.bufferActions.add(Echo.buildAction(this.assignment.getHeading()));
     }
 
-
-
     public void goToCloserEdge(){
         int BORDERCONTROL = 3;
         inCorner = true;
@@ -105,6 +103,14 @@ public class LocationStrategy extends DroneStrategy {
 
     @Override
     public Strategy getNextStrategy() {
-        return null;
+        this.islandMap.clear();
+
+        if (this.islandMap.getCreeks().size()==0) {
+            //@TODO TO SET TO GOOD STRAYT
+            this.bufferActions.add(Fly.buildAction());
+            return new SnakeStrategy(new JSONObject());
+        }
+
+        return new EdgeStrategy(islandMap, assignment, bufferActions, actionsHistory);
     }
 }

@@ -17,7 +17,6 @@ public class LocationStrategy extends DroneStrategy {
     /*
         Cette stratégie est la première appellé, elle permet de se localiser sur la carte lors de l'arrivé du drone
     */
-
     private int nbEcho = 0;
     private int minRange;
     private boolean leftFromStart;

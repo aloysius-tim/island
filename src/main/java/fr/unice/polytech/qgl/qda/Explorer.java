@@ -24,9 +24,8 @@ public class Explorer implements IExplorerRaid {
 
     @Override
     public String takeDecision() {
-        if (this.strategy.isEndOfStrat()){
+        if (this.strategy.isEndOfStrat())
             this.strategy=strategy.getNextStrategy();
-        }
 
         return strategy.getNextMove().toString();
     }

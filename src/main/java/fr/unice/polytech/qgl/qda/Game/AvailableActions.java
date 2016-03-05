@@ -66,7 +66,7 @@ public enum AvailableActions {
         return super.toString();
     }
 
-    public Class getAssociatedClass() {
+    public Class<Action> getAssociatedClass() {
         return aClass;
     }
 

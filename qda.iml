@@ -7,7 +7,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/src/main/java/fr/unice/polytech/qgl/qda/Strategizer" />
-      <excludeFolder url="file://$MODULE_DIR$/src/test/java/fr/unice/polytech/qgl/qda" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
