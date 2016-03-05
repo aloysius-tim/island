@@ -1,0 +1,87 @@
+[{
+  "data": {
+    "heading": "E",
+    "men": 3,
+    "contracts": [
+      {
+        "amount": 100,
+        "resource": "GLASS"
+      },
+      {
+        "amount": 4000,
+        "resource": "WOOD"
+      },
+      {
+        "amount": 1000,
+        "resource": "FUR"
+      }
+    ],
+    "budget": 10000
+  },
+  "part": "Engine",
+  "time": 1456762195428,
+  "meth": "initialize"
+},{
+  "data": {
+    "action": "echo",
+    "parameters": {"direction": "N"}
+  },
+  "part": "Explorer",
+  "time": 1456762195481,
+  "meth": "takeDecision"
+},{
+  "data": {
+    "cost": 6,
+    "extras": {
+      "found": "OUT_OF_RANGE",
+      "range": 0
+    },
+    "status": "OK"
+  },
+  "part": "Engine",
+  "time": 1456762195487,
+  "meth": "takeDecision"
+},{
+  "data": {
+    "action": "echo",
+    "parameters": {"direction": "S"}
+  },
+  "part": "Explorer",
+  "time": 1456762195496,
+  "meth": "takeDecision"
+},{
+  "data": {
+    "cost": 7,
+    "extras": {
+      "found": "OUT_OF_RANGE",
+      "range": 52
+    },
+    "status": "OK"
+  },
+  "part": "Engine",
+  "time": 1456762195498,
+  "meth": "takeDecision"
+},{
+  "data": {
+    "exception": ["NoSuchElementException"],
+    "stacktrace": [[
+      "java.util.LinkedList.getFirst(LinkedList.java:244)",
+      "fr.unice.polytech.qgl.qda.strategy.Strategy.getNextMove(Strategy.java:50)",
+      "fr.unice.polytech.qgl.qda.strategy.DronePhase.SpecificPattern.LocationStrategy.getNextMove(LocationStrategy.java:103)",
+      "fr.unice.polytech.qgl.qda.Explorer.takeDecision(Explorer.java:31)",
+      "eu.ace_design.island.game.Engine$$anonfun$2.apply(Engine.scala:55)",
+      "eu.ace_design.island.game.Engine$$anonfun$2.apply(Engine.scala:55)",
+      "scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24)",
+      "scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24)",
+      "scala.concurrent.impl.ExecutionContextImpl$AdaptedForkJoinTask.exec(ExecutionContextImpl.scala:121)",
+      "scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260)",
+      "scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339)",
+      "scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979)",
+      "scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107)"
+    ]],
+    "message": [null]
+  },
+  "part": "Explorer",
+  "time": 1456762195500,
+  "meth": "takeDecision"
+},{}]
