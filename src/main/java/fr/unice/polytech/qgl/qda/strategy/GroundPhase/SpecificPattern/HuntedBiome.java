@@ -12,19 +12,17 @@ public class HuntedBiome extends GroundStrategy {
     private Ressource targetedResource;
     private Biome biomeOfResource;
 
-    public HuntedBiome(JSONObject context) {
-        super(context);
-    }
-
     /**
      *
      * Default constructor
      *
+     * @param context The current context in which we create the Strategy
      * @param currentTile The first Tile we want to reach
      * @param targetedResource The resource we want to harvest
      * @param biomeOfResource The biome of the target Tile & Resource
      */
-    public HuntedBiome(Tile currentTile, Ressource targetedResource, Biome biomeOfResource) {
+    public HuntedBiome(JSONObject context, Tile currentTile, Ressource targetedResource, Biome biomeOfResource) {
+        super(context);
         this.currentTile = currentTile;
         this.targetedResource = targetedResource;
         this.biomeOfResource = biomeOfResource;
