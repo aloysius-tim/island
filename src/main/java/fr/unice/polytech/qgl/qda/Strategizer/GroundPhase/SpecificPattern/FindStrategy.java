@@ -69,21 +69,21 @@ public class FindStrategy extends Strategy implements IStrategy {
         int i = 0;
         while(i<interestRessource.length){ // parcours la liste des priorités pour les ressources du contrats
 
-            for (Ressource res : tileList.keySet()) {
-                if(res == interestRessource[i]) {
+            for (Ressource res : tileList.keySet()) { // Parcours le dictionnaire associant à chaque ressources, une List contenant les tiles qui possède la ressource en question
+                if(res == interestRessource[i]) { // Si la ressource est au niveau de priorité courant
 
-                    for (Tile tile : tileList.get(res)) {
-                        int distance = findDistance(fromThis, tile);
+                    for (Tile tile : tileList.get(res)) { // Parcours la liste des tile du tableau de tile possedant la ressource
+                        int distance = findDistance(fromThis, tile); // calcule la distance entre la Tile FromThis et chacune des tiles du tableau pour trouver la plus proche
                         if (distance < prevDistance) {
                             min = tile;
                             prevDistance = distance;
                         }
                     }
-                    if(min != null){
-                        for(Tile t : tileList.get(res)){
-                            if(t.getX() == min.getX() && t.getY() == min.getY()){
-                                for(Biome biome:t.getRelatedBiomes().keySet()){
-                                    if(res.getAssociatedBiomes().contains(biome)){
+                    if(min != null){ // Si on à trouvé une tile
+                        for(Tile t : tileList.get(res)){ // On parcours a nouveau le tableau
+                            if(t.getX() == min.getX() && t.getY() == min.getY()){ // On cherche la tile la plus proche dans le tableau avec celle qu'on à trouvé précédemment
+                                for(Biome biome:t.getRelatedBiomes().keySet()){ // On parcours tous les biomes existant sur la Tile (J'ai du remonter 3-4 classe pour comprendre sa....)
+                                    if(res.getAssociatedBiomes().contains(biome)){ // Si la liste des biome contenant notre ressources, contient un des biome de la tile
                                         huntedBiome = new HuntedBiome(min,res,biome); // on a une nouvelle cible
                                         break;
                                     }
