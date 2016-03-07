@@ -8,17 +8,11 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 
-public class GroundStrategy extends Strategy {
-    public GroundStrategy(JSONObject context) {
-        super(context);
-    }
-
-    public GroundStrategy(IslandMap islandMap, Assignment assignment, LinkedList<JSONObject> bufferActions, LinkedList<Action> actionsHistory) {
-        super(islandMap, assignment, bufferActions, actionsHistory);
+public abstract class GroundStrategy extends Strategy {
+    public GroundStrategy(IslandMap islandMap, Assignment assignment, LinkedList<JSONObject> bufferActions, LinkedList<Action> actionsHistory, int remainingBudget) {
+        super(islandMap, assignment, bufferActions, actionsHistory, remainingBudget);
     }
 
     @Override
-    public Strategy getNextStrategy() {
-        return null;
-    }
+    public abstract Strategy getNextStrategy();
 }

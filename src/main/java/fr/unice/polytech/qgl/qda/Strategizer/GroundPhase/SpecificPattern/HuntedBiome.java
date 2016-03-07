@@ -19,8 +19,7 @@ public class HuntedBiome {
     /*
     Classe associé à FindStrategy qui enregistre les coordonnées d'un tile ainsi que la ressource associé et son biome
     afin de pouvoir mieux contrôler la phase d'exploration d'un biome pour récupérer des matières premières
-
-     */
+    */
 
     private Biome biome;
     private Ressource resource;
@@ -119,9 +118,6 @@ public class HuntedBiome {
                 nextStep();
                 nextAction.add(Scout.buildAction(direction.getReverse()));
                 update(direction.getReverse());
-
-
-
             }
             else if(outOfBiomeCounter<OUT_OF_INTEREST){
                 increment();

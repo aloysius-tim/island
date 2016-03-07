@@ -27,8 +27,8 @@ public class EdgeStrategy extends DroneStrategy {
     private boolean onLeft;
     private boolean clock;
 
-    public EdgeStrategy(IslandMap islandMap, Assignment assignment, LinkedList<JSONObject> bufferActions, LinkedList<Action> actionsHistory) {
-        super(islandMap, assignment, bufferActions, actionsHistory);
+    public EdgeStrategy(IslandMap islandMap, Assignment assignment, LinkedList<JSONObject> bufferActions, LinkedList<Action> actionsHistory, int remainingBudget) {
+        super(islandMap, assignment, bufferActions, actionsHistory, remainingBudget);
 
         if(this.islandMap.getDirectionActuelle() == Direction.N || this.islandMap.getDirectionActuelle() == Direction.S)
             this.bufferActions.add(Echo.buildAction(Direction.E));
@@ -41,7 +41,7 @@ public class EdgeStrategy extends DroneStrategy {
     public void init(){
         this.islandMap.getWidth();
         this.islandMap.getPositionActuelle();
-        switch(position){
+        /*switch(position){
             case BOTTOM_LEFT || BOTTOM_RIGHT:
                 if(onLeft){
                     clock = false;
@@ -60,7 +60,7 @@ public class EdgeStrategy extends DroneStrategy {
                 break;
             default:
                 clock = false;
-        }
+        }*/
     }
 
     ///////////// METHODES DE PLACEMENT ////////////////
@@ -221,6 +221,6 @@ public class EdgeStrategy extends DroneStrategy {
 
     @Override
     public Strategy getNextStrategy() {
-        return super.getNextStrategy();
+        return new SnakeStrategy(this.islandMap, this.assignment, this.bufferActions, this.actionsHistory, this.remainingBudget);
     }
 }

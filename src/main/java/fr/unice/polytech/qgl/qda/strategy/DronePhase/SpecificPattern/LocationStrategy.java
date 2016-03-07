@@ -1,12 +1,17 @@
 package fr.unice.polytech.qgl.qda.strategy.DronePhase.SpecificPattern;
 
+import fr.unice.polytech.qgl.qda.Game.Assignment;
 import fr.unice.polytech.qgl.qda.Island.Direction;
+import fr.unice.polytech.qgl.qda.Island.IslandMap;
+import fr.unice.polytech.qgl.qda.Json.actions.Action;
 import fr.unice.polytech.qgl.qda.Json.actions.aerial.Echo;
 import fr.unice.polytech.qgl.qda.Json.actions.aerial.Fly;
 import fr.unice.polytech.qgl.qda.Json.actions.aerial.Heading;
 import fr.unice.polytech.qgl.qda.strategy.DronePhase.DroneStrategy;
 import fr.unice.polytech.qgl.qda.strategy.Strategy;
 import org.json.JSONObject;
+
+import java.util.LinkedList;
 
 /**
  * Created by justin on 08/02/16.
@@ -18,7 +23,9 @@ public class LocationStrategy extends DroneStrategy {
     private boolean isInit = false;
     private boolean inCorner = false;
 
-    public LocationStrategy(JSONObject context) { super(context); }
+    public LocationStrategy(JSONObject assignment) {
+        super(new IslandMap(Direction.getHeading(assignment.getString("heading"))), new Assignment(assignment), new LinkedList<>(), new LinkedList<>(), assignment.getInt("budget"));
+    }
 
     public void init(){
         this.bufferActions.add(Echo.buildAction(this.islandMap.getDirectionActuelle().getLeftDirection()));
@@ -108,7 +115,7 @@ public class LocationStrategy extends DroneStrategy {
         if (this.islandMap.getCreeks().size()==0) {
             //@TODO TO SET TO GOOD STRAYT
             this.bufferActions.add(Fly.buildAction());
-            return new SnakeStrategy(new JSONObject());
+            return new SnakeStrategy(null,null,null,null,1);
         }
 
         return new EdgeStrategy(islandMap, assignment, bufferActions, actionsHistory);

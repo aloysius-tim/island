@@ -11,17 +11,11 @@ import java.util.LinkedList;
 /**
  * IslandProject created on 23/11/2015 by Keynes Timothy - Aloysius_tim
  */
-public class DroneStrategy extends Strategy {
-    public DroneStrategy(JSONObject assignment) {
-        super(assignment);
-    }
-
-    public DroneStrategy(IslandMap islandMap, Assignment assignment, LinkedList<JSONObject> bufferActions, LinkedList<Action> actionsHistory) {
-        super(islandMap, assignment, bufferActions, actionsHistory);
+public abstract class DroneStrategy extends Strategy {
+    public DroneStrategy(IslandMap islandMap, Assignment assignment, LinkedList<JSONObject> bufferActions, LinkedList<Action> actionsHistory, int remainingBudget) {
+        super(islandMap, assignment, bufferActions, actionsHistory, remainingBudget);
     }
 
     @Override
-    public Strategy getNextStrategy() {
-        return null;
-    }
+    public abstract Strategy getNextStrategy();
 }

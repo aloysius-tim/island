@@ -22,22 +22,14 @@ public abstract class Strategy {
 
     protected boolean endOfStrat;
 
-    public Strategy(JSONObject assignment) {
-        this.endOfStrat = false;
-        this.assignment = new Assignment(assignment);
-        this.remainingBudget = this.assignment.getBudget();
-
-        this.islandMap = new IslandMap(this.assignment.getHeading());
-
-        this.bufferActions = new LinkedList<>();
-        this.actionsHistory = new LinkedList<>();
-    }
-
-    public Strategy(IslandMap islandMap, Assignment assignment, LinkedList<JSONObject> bufferActions, LinkedList<Action> actionsHistory) {
+    public Strategy(IslandMap islandMap, Assignment assignment, LinkedList<JSONObject> bufferActions, LinkedList<Action> actionsHistory, int remainingBudget) {
         this.islandMap = islandMap;
         this.assignment = assignment;
         this.bufferActions = bufferActions;
         this.actionsHistory = actionsHistory;
+        this.remainingBudget = remainingBudget;
+
+        this.endOfStrat = false;
     }
 
     public void interpretAcknowledgeResult(JSONObject acknowledgeResult) throws IllegalAccessException, InstantiationException, InvocationTargetException {
