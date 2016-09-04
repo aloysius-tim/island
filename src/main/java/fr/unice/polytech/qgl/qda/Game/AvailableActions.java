@@ -1,13 +1,11 @@
 package fr.unice.polytech.qgl.qda.Game;
 
-import fr.unice.polytech.qgl.qda.Json.actions.Action;
-import fr.unice.polytech.qgl.qda.Json.actions.aerial.Echo;
-import fr.unice.polytech.qgl.qda.Json.actions.aerial.Fly;
-import fr.unice.polytech.qgl.qda.Json.actions.aerial.Heading;
-import fr.unice.polytech.qgl.qda.Json.actions.aerial.Scan;
-import fr.unice.polytech.qgl.qda.Json.actions.both.Land;
-import fr.unice.polytech.qgl.qda.Json.actions.both.Stop;
-import fr.unice.polytech.qgl.qda.Json.actions.ground.*;
+import fr.unice.polytech.qgl.qda.actions.Action;
+import fr.unice.polytech.qgl.qda.actions.aerial.Echo;
+import fr.unice.polytech.qgl.qda.actions.aerial.Fly;
+import fr.unice.polytech.qgl.qda.actions.aerial.Heading;
+import fr.unice.polytech.qgl.qda.actions.aerial.Scan;
+import fr.unice.polytech.qgl.qda.actions.ground.*;
 
 /*
 interface  ActionBuilder {

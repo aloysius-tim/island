@@ -1,9 +1,8 @@
 package fr.unice.polytech.qgl.qda.Game;
 
-import fr.unice.polytech.qgl.qda.Json.actions.aerial.Echo;
-import org.junit.Test;
-import org.junit.Before;
 import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -57,14 +56,4 @@ public class AvailableActionsTest {
     public void testToString() throws Exception {
         assertEquals("ECHO", availableActions.toString());
     }
-
-    /**
-     * Method: getAssociatedClass()
-     */
-    @Test
-    public void testGetAssociatedClass() throws Exception {
-        assertEquals(Echo.class, availableActions.getAssociatedClass());
-    }
-
-
 } 

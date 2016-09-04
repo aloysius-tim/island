@@ -2,6 +2,8 @@ package fr.unice.polytech.qgl.qda.Island;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * IslandProject created on 18/11/2015 by Keynes Timothy - Aloysius_tim
@@ -54,32 +56,32 @@ public enum Ressource {
         addAll(QUARTZ.associatedBiomes);
         addAll(WOOD.associatedBiomes);
     }}, new HashMap<Ressource, Double>(){{
-        put(QUARTZ, (double) 5);
-        put(WOOD, (double) 10);
+        put(QUARTZ, (double) 11);
+        put(WOOD, (double) 6);
     }}),
     INGOT("standardized ingots", TypeRessource.MANUFACTURED, new ArrayList<Biome>(){{
         addAll(ORE.associatedBiomes);
         addAll(WOOD.associatedBiomes);
     }}, new HashMap<Ressource, Double>(){{
-        put(ORE, (double) 5);
-        put(WOOD, (double) 5);
+        put(ORE, (double) 5.5);
+        put(WOOD, (double) 5.5);
     }}),
     LEATHER("high quality leather pieces", TypeRessource.MANUFACTURED, new ArrayList<Biome>(){{
         addAll(FUR.associatedBiomes);
     }}, new HashMap<Ressource, Double>(){{
-        put(FUR, (double) 3);
+        put(FUR, (double) 3.3);
     }}),
     PLANK("materials for carpenters", TypeRessource.MANUFACTURED, new ArrayList<Biome>(){{
         addAll(WOOD.associatedBiomes);
     }}, new HashMap<Ressource, Double>(){{
-        put(WOOD, 0.25);
+        put(WOOD, 0.3);
     }}),
     RUM("world renowned beverage", TypeRessource.MANUFACTURED, new ArrayList<Biome>(){{
         addAll(SUGAR_CANE.associatedBiomes);
         addAll(FRUITS.associatedBiomes);
     }}, new HashMap<Ressource, Double>(){{
-        put(SUGAR_CANE, (double) 10);
-        put(FRUITS, (double) 1);
+        put(SUGAR_CANE, (double) 11);
+        put(FRUITS, (double) 1.1);
     }});
 
     private String description;
@@ -104,6 +106,18 @@ public enum Ressource {
     public enum TypeRessource{
         PRIMARY,
         MANUFACTURED
+    }
+
+    public HashMap<Ressource, Integer> getFinalRecipe(int nbUnit){
+        HashMap<Ressource, Integer> recipe=new HashMap<>();
+
+        Iterator it = this.getRecipe().entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+
+            recipe.put((Ressource) pair.getKey(), (int)(((Double)pair.getValue())*nbUnit));
+        }
+        return recipe;
     }
 
     public ArrayList<Biome> getAssociatedBiomes() {

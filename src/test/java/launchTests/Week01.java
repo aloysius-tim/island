@@ -22,6 +22,7 @@ public class Week01 {
                 .collecting(800, "QUARTZ")
                 .collecting(1000,   "PLANK")
                 .storingInto("src/test/java/launchTests/outputs/week01")
+                .silentMode()
                 .fire();
     }
 }

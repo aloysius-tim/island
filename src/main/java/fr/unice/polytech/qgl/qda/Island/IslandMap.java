@@ -15,8 +15,10 @@ public class IslandMap extends HashMap<Point, Tile> {
     private Tile positionActuelle;
     private Direction directionActuelle;
 
-    /** @TODO : Un scan ne donne pas la tile sur laquelle se trouve la crique **/
+    private HashMap<Ressource, Integer> collectedRessources;
+
     private HashMap<String, Tile> creeks; /** une creek est une Tile à laquelle est associée un ID de type String **/
+
 
     private int width = 0;
     private int height = 0;
@@ -27,12 +29,19 @@ public class IslandMap extends HashMap<Point, Tile> {
      * @param directionActuelle the direction actuelle
      */
     public IslandMap(Direction directionActuelle) {
+        this.collectedRessources=new HashMap<>();
         this.phase = AvailableActions.Phase.PHASE1;
         this.directionActuelle = directionActuelle;
 
         this.positionActuelle = createTile(new Point(0, 0));
 
         this.creeks = new HashMap<>();
+    }
+
+    public void updateCollectedRessource(Ressource ressource, int nb){
+        if (this.collectedRessources.containsKey(ressource))
+            this.collectedRessources.replace(ressource, this.collectedRessources.get(ressource)+nb);
+        else this.collectedRessources.put(ressource, nb);
     }
 
     public Direction getDirectionActuelle() {
@@ -285,7 +294,6 @@ public class IslandMap extends HashMap<Point, Tile> {
     }
 
     public void glimpse(Direction direction, int range, ArrayList<HashMap<Biome, Double>> myReport) {
-
         /*
         this.positionActuelle.addRelatedBiomes(myReport.get(0));
 
@@ -313,5 +321,9 @@ public class IslandMap extends HashMap<Point, Tile> {
                 ", positionActuelle=" + positionActuelle +
                 ", directionActuelle=" + directionActuelle +
                 '}';
+    }
+
+    public HashMap<Ressource, Integer> getCollectedRessources() {
+        return collectedRessources;
     }
 }

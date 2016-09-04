@@ -19,6 +19,7 @@ public class Week51 {
                 .collecting(3000, "WOOD")
                 .collecting(100,   "GLASS")
                 .storingInto("src/test/java/launchTests/outputs/week51")
+                .silentMode()
                 .fire();
     }
 }

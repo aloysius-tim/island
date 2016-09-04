@@ -1,20 +1,23 @@
 package fr.unice.polytech.qgl.qda.strategy.DronePhase.SpecificPattern;
 
 import fr.unice.polytech.qgl.qda.Game.Assignment;
-import fr.unice.polytech.qgl.qda.Game.AvailableActions;
-import fr.unice.polytech.qgl.qda.Island.Biome;
 import fr.unice.polytech.qgl.qda.Island.Direction;
 import fr.unice.polytech.qgl.qda.Island.IslandMap;
-import fr.unice.polytech.qgl.qda.Json.actions.Action;
-import fr.unice.polytech.qgl.qda.Json.actions.aerial.Echo;
-import fr.unice.polytech.qgl.qda.Json.actions.aerial.Fly;
-import fr.unice.polytech.qgl.qda.Json.actions.aerial.Heading;
-import fr.unice.polytech.qgl.qda.Json.actions.aerial.Scan;
+import fr.unice.polytech.qgl.qda.Island.Ressource;
+import fr.unice.polytech.qgl.qda.Island.Tile;
+import fr.unice.polytech.qgl.qda.actions.Action;
+import fr.unice.polytech.qgl.qda.actions.aerial.DecisionOnAerialResultInterpretation;
+import fr.unice.polytech.qgl.qda.actions.aerial.Echo;
+import fr.unice.polytech.qgl.qda.actions.aerial.Fly;
+import fr.unice.polytech.qgl.qda.actions.aerial.Scan;
 import fr.unice.polytech.qgl.qda.strategy.DronePhase.DroneStrategy;
+import fr.unice.polytech.qgl.qda.strategy.GroundPhase.SpecificPattern.FindStrategy;
 import fr.unice.polytech.qgl.qda.strategy.Strategy;
 import org.json.JSONObject;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -27,22 +30,22 @@ public class EdgeStrategy extends DroneStrategy {
     private boolean onLeft;
     private boolean clock;
 
-    public EdgeStrategy(IslandMap islandMap, Assignment assignment, LinkedList<JSONObject> bufferActions, LinkedList<Action> actionsHistory, int remainingBudget) {
-        super(islandMap, assignment, bufferActions, actionsHistory, remainingBudget);
+    public EdgeStrategy(IslandMap islandMap, Assignment assignment, LinkedList<JSONObject> bufferActions, LinkedList<Action> actionsHistory, int remainingBudget, HashMap<Ressource,ArrayList<Tile>> tileList, Position position, Direction currentHeading) {
+        super(islandMap, assignment, bufferActions, actionsHistory, remainingBudget, tileList, position, currentHeading);
 
-        if(this.islandMap.getDirectionActuelle() == Direction.N || this.islandMap.getDirectionActuelle() == Direction.S)
+        setCurrentHeading(currentHeading);
+        if(this.getCurrentHeading() == Direction.N || this.getCurrentHeading() == Direction.S)
             this.bufferActions.add(Echo.buildAction(Direction.E));
         else
-            this.bufferActions.add(Echo.buildAction(this.islandMap.getDirectionActuelle()));
+            this.bufferActions.add(Echo.buildAction(this.getCurrentHeading()));
 
         this.bufferActions.add(Scan.buildAction());
     }
 
     public void init(){
-        this.islandMap.getWidth();
-        this.islandMap.getPositionActuelle();
-        /*switch(position){
-            case BOTTOM_LEFT || BOTTOM_RIGHT:
+
+        switch(position){
+            case BOTTOM_LEFT:
                 if(onLeft){
                     clock = false;
                 }
@@ -50,8 +53,24 @@ public class EdgeStrategy extends DroneStrategy {
                     clock = true;
                 }
                 break;
-            case UPPER_LEFT || UPPER-RIGHT:
+            case BOTTOM_RIGHT:
                 if(onLeft){
+                    clock = false;
+                }
+                else{
+                    clock = true;
+                }
+                break;
+            case UPPER_LEFT:
+                if(onLeft){
+                    clock = true;
+                }
+                else{
+                    clock = false;
+                }
+                break;
+            case UPPER_RIGHT:
+                if(onLeft) {
                     clock = true;
                 }
                 else{
@@ -60,7 +79,7 @@ public class EdgeStrategy extends DroneStrategy {
                 break;
             default:
                 clock = false;
-        }*/
+        }
     }
 
     ///////////// METHODES DE PLACEMENT ////////////////
@@ -70,21 +89,21 @@ public class EdgeStrategy extends DroneStrategy {
      */
 
     public void up(){
-        this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getRightDirection()));
+        turnRight();
         if (!clock)this.bufferActions.add(Fly.buildAction());
-        this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getRightDirection()));
-        this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getRightDirection()));
+        turnRight();
+        turnRight();
         if (clock)this.bufferActions.add(Fly.buildAction());
-        this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getRightDirection()));
+        turnRight();
     }
 
     public void down(){
-        this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getRightDirection()));
+        turnRight();
         if (clock)this.bufferActions.add(Fly.buildAction());
-        this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getRightDirection()));
-        this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getRightDirection()));
+        turnRight();
+        turnRight();
         if (!clock)this.bufferActions.add(Fly.buildAction());
-        this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getRightDirection()));
+        turnRight();
     }
 
 
@@ -95,132 +114,75 @@ public class EdgeStrategy extends DroneStrategy {
      */
     public void headingNext(){
         if(clock) {
-            this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getLeftDirection()));
-            this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getLeftDirection()));
-            this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getLeftDirection()));
-        }
-        else {
-            this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getRightDirection()));
-            this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getRightDirection()));
-            this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getRightDirection()));
+            turnLeft();
+            turnLeft();
+            turnLeft();
+        } else {
+            turnRight();
+            turnRight();
+            turnRight();
         }
         this.bufferActions.add(Fly.buildAction());
     }
 
     public void headingPrevious(){
         if(clock) {
-            this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getRightDirection()));
-            this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getRightDirection()));
-            this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getRightDirection()));
+            turnRight();
+            turnRight();
+            turnRight();
         }
         else{
-            this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getLeftDirection()));
-            this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getLeftDirection()));
-            this.bufferActions.add(Heading.buildAction(this.islandMap.getDirectionActuelle().getLeftDirection()));
+            turnLeft();
+            turnLeft();
+            turnLeft();
         }
         this.bufferActions.add(Fly.buildAction());
-    }
-
-    /*
-    méthode lié aux résultats des échos, le premier écho fait sert à déterminer si le drone est sur le côté gauche ou droit de l'île, les suivants serviront à changer de référenciel
-    ou à continuer sur le même
-     */
-    private void echoStrat(Echo echo){
-        boolean ground = (echo.getBiome() == Biome.GROUND);
-
-        if(init){
-            init = false;
-            if(ground){
-                if(echo.getDirection() == Direction.E)
-                    onLeft = true;
-                else
-                    onLeft = false;
-            }
-            else{
-                if(echo.getDirection() == Direction.E)
-                    onLeft = false;
-                else
-                    onLeft = true;
-            }
-            init();
-        }
-        else {
-            if (ground) this.bufferActions.add(Fly.buildAction());
-            else headingNext();
-            this.bufferActions.add(Scan.buildAction());
-        }
-    }
-
-    /** méthode la plus importante de cette classe, elle contient l'algorythme pour faire le contours de l'île
-    les variable up/down : si le drone monte la variable up passe à true et si il descend down passe true
-    permet d'éviter les boucles**/
-    private void edgeStrat(Scan scan){
-        boolean ocean = (scan.getBiomes().contains(Biome.OCEAN));
-        boolean ground = (scan.getBiomes().contains(Biome.GROUND));
-
-        if (ocean && !ground){ // cas où le scan ne trouve que de l'ocean
-            if(up){
-                this.bufferActions.add(Fly.buildAction());
-                up = false;
-                down = false;
-            }
-            else {
-                if(down){
-                    headingNext();
-                    this.bufferActions.add(Scan.buildAction());
-                    up = false;
-                    down = false;
-                    return;
-                }
-                down();
-                down = true;
-            }
-
-        }
-        else if (!ocean && ground) { // cas où le scan ne trouve que de la terre
-            if(down){
-                this.bufferActions.add(Fly.buildAction());
-                down = false;
-                up = false;
-            }
-            else{
-                if(up){
-                    headingPrevious();
-                    this.bufferActions.add(Scan.buildAction());
-                    up = false;
-                    down = false;
-                    return;
-                }
-                up();
-                up = true;
-            }
-        }
-        else{ // cas où le scan trouve de la terre et de l'ocean
-            if(clock)
-                this.bufferActions.add(Echo.buildAction(this.islandMap.getDirectionActuelle().getRightDirection()));
-            else
-                this.bufferActions.add(Echo.buildAction(this.islandMap.getDirectionActuelle().getLeftDirection()));
-            up = false;
-            down = false;
-            return;
-        }
-        this.bufferActions.add(Scan.buildAction());
     }
 
     @Override
     public void interpretAcknowledgeResult(JSONObject acknowledgeResult) throws IllegalAccessException, InvocationTargetException, InstantiationException {
         super.interpretAcknowledgeResult(acknowledgeResult);
 
-        Action last = this.actionsHistory.getLast();
-
-        if (last.getActionType() == AvailableActions.ECHO)
-            echoStrat((Echo) last);
-        else
-            edgeStrat((Scan) last);
+        if (this.islandMap.getCreeks().size()>0) endOfStrat=true;
+        else ((DecisionOnAerialResultInterpretation) this.actionsHistory.getLast()).takeDecisionOnEdgeStrat(this);
     }
 
     @Override
     public Strategy getNextStrategy() {
-        return new SnakeStrategy(this.islandMap, this.assignment, this.bufferActions, this.actionsHistory, this.remainingBudget);
+        this.bufferActions.clear();
+        return new FindStrategy(this.islandMap, this.assignment, this.bufferActions, this.actionsHistory, this.remainingBudget, this.tileList);
+    }
+
+    public boolean getInit() {
+        return init;
+    }
+    public void setInit(boolean b) {
+        this.init=b;
+    }
+
+    public boolean isOnLeft() {
+        return onLeft;
+    }
+
+    public void setOnLeft(boolean onLeft) {
+        this.onLeft = onLeft;
+    }
+    public boolean getUp() {
+        return up;
+    }
+    public void setUp(boolean up) {
+        this.up = up;
+    }
+    public void setDown(boolean down) {
+        this.down = down;
+    }
+    public boolean isUp() {
+        return up;
+    }
+    public boolean isDown() {
+        return down;
+    }
+    public boolean isClock() {
+        return clock;
     }
 }

@@ -22,6 +22,7 @@ public class Week03 {
                 .collecting(200, "QUARTZ")
                 .collecting(50,   "GLASS")
                 .storingInto("src/test/java/launchTests/outputs/week03")
+                .silentMode()
                 .fire();
     }
 }

@@ -1,6 +1,5 @@
 package fr.unice.polytech.qgl.qda.Game;
 
-import fr.unice.polytech.qgl.qda.Game.Assignment;
 import fr.unice.polytech.qgl.qda.Island.Direction;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -90,11 +89,5 @@ public class AssignmentTest {
     public void testGetNbMan() {
         assertEquals(12, a.getNbMan());
         assertEquals(7, b.getNbMan());
-    }
-
-    @Test
-    public void updateBudget() {
-        a.updateBudget(10);
-        assertEquals(9990, a.getBudget());
     }
 }

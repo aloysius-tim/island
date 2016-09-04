@@ -14,13 +14,14 @@ public class Week04 {
         run(Explorer.class)
                 .exploring(new File("src/test/java/launchTests/maps/week04.json"))
                 .withSeed(0L)
-                .startingAt(1,1,"EAST")
+                .startingAt(50,1,"SOUTH")
                 .backBefore(10000)
                 .withCrew(3)
                 .collecting(1000,  "FUR")
                 .collecting(4000, "WOOD")
                 .collecting(100,   "GLASS")
                 .storingInto("src/test/java/launchTests/outputs/week04")
+                .silentMode()
                 .fire();
     }
 }

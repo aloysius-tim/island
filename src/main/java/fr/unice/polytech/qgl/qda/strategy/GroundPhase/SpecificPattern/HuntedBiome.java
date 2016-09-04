@@ -1,46 +1,149 @@
 package fr.unice.polytech.qgl.qda.strategy.GroundPhase.SpecificPattern;
 
-import fr.unice.polytech.qgl.qda.Game.Assignment;
 import fr.unice.polytech.qgl.qda.Island.Biome;
-import fr.unice.polytech.qgl.qda.Island.IslandMap;
+import fr.unice.polytech.qgl.qda.Island.Direction;
 import fr.unice.polytech.qgl.qda.Island.Ressource;
 import fr.unice.polytech.qgl.qda.Island.Tile;
-import fr.unice.polytech.qgl.qda.Json.actions.Action;
-import fr.unice.polytech.qgl.qda.strategy.GroundPhase.GroundStrategy;
-import fr.unice.polytech.qgl.qda.strategy.Strategy;
+import fr.unice.polytech.qgl.qda.actions.ground.Explore;
+import fr.unice.polytech.qgl.qda.actions.ground.Move_to;
+import fr.unice.polytech.qgl.qda.actions.ground.Scout;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
 
-public class HuntedBiome extends GroundStrategy {
+/**
+ * Classe associé à FindStrategy qui enregistre les coordonnées d'un tile ainsi que la ressource associé et son biome
+ * afin de pouvoir mieux contrôler la phase d'exploration d'un biome pour récupérer des matières premières
+ **/
+public class HuntedBiome {
+    private final int OUT_OF_INTEREST = 5; // on estime qu'après 5 déplacement sans retrouver le Biome  (après un changement de palié) , on  est soit au dessus , soit en dessous du biome
+    private Biome biome;
+    private Ressource resource;
+    private Tile tile;
+    private int outOfBiomeCounter;
+    private boolean end;
+    private boolean onBiome;
+    private boolean reverse;
+    private Direction direction;
+    private LinkedList<JSONObject> nextAction;
 
-    private Tile currentTile;
-    private Ressource targetedResource;
-    private Biome biomeOfResource;
-
-
-
-    /**
-     *
-     * Default constructor
-     *
-     * @param islandMap The current map running
-     * @param assignment The assigments of the map
-     * @param bufferActions The actions waiting to be sent
-     * @param actionsHistory The previous actions
-     * @param currentTile The first Tile we want to reach
-     * @param targetedResource The resource we want to harvest
-     * @param biomeOfResource The biome of the target Tile & Resource
-     */
-    public HuntedBiome(IslandMap islandMap, Assignment assignment, LinkedList<JSONObject> bufferActions, LinkedList<Action> actionsHistory, Tile currentTile, Ressource targetedResource, Biome biomeOfResource, int remainingBudget) {
-        super(islandMap, assignment, bufferActions, actionsHistory, remainingBudget);
-        this.currentTile = currentTile; // Dans Island Map ! #responsabiltiés !
-        this.targetedResource = targetedResource;
-        this.biomeOfResource = biomeOfResource; //Voir et utiliser l'enum Ressource qui contient toutes les associations entre biome et ressources !
+    public HuntedBiome(Tile tile, Ressource resource, Biome biome) {
+        this.nextAction = new LinkedList<>();
+        this.direction = Direction.E;
+        this.tile = tile;
+        this.resource = resource;
+        this.biome = biome;
+        this.onBiome = false;
+        this.reverse = false;
+        this.end = false;
+        this.outOfBiomeCounter = 0;
     }
 
-    @Override
-    public Strategy getNextStrategy() {
-        return null;
+    public Tile getTile() {
+        return this.tile;
+    }
+
+    public Biome getBiome() {
+        return this.biome;
+    }
+
+    public Ressource getResource() {
+        return this.resource;
+    }
+
+    public Boolean getOnBiome() {
+        return this.onBiome;
+    }
+
+    public Boolean getReverse() {
+        return this.reverse;
+    }
+
+    public void setReverse(boolean set) {
+        reverse = set;
+    }
+
+    public Boolean getEnd() {
+        return this.end;
+    }
+
+    public Direction getDirection() {
+        return this.direction;
+    }
+
+    public void update(Direction direction) {
+        this.direction = direction;
+    }
+
+    public void nextStep() {
+        if (reverse) {
+            nextAction.add(Move_to.buildAction(Direction.S));
+        } else {
+            nextAction.add(Move_to.buildAction(Direction.N));
+        }
+    }
+    // si on ne trouve plus de ressource interessante on passe au pallié suivant et on repart dans le sens opposé,
+    // si après qu'on ait changé de palié on a toujours pas de ressource, on repart au point de départ du biome et on fait la même chose
+    // dans le sens inverse (on commence l'exploration vers l'Est et on monte à chaque changement de palié au début donc à cette étape, on explore vers l'Ouest
+    // on descend à chaque changement de palié)
+
+    //  si on trouve une ressource interessante, on continue dans la même direction
+    public LinkedList<JSONObject> run(Direction direction) {
+        this.onBiome = true;
+        this.nextAction.clear();
+        reset();
+        if (direction == Direction.N) {
+            nextAction.add(Scout.buildAction(Direction.E));
+            update(Direction.E);
+        } else {
+            nextAction.add(Move_to.buildAction(direction));
+            nextAction.add(Explore.buildAction());
+            update(direction);
+        }
+        return this.nextAction;
+    }
+
+    public LinkedList<JSONObject> change(Direction direction) {
+        this.nextAction.clear();
+
+        if (direction == Direction.N) {
+            end = true;
+        } else {
+            if (outOfBiomeCounter == 0) {
+                increment();
+
+                nextStep();
+                nextAction.add(Scout.buildAction(direction.getReverse()));
+                update(direction.getReverse());
+
+
+            } else if (outOfBiomeCounter < OUT_OF_INTEREST) {
+                increment();
+
+                nextAction.add(Move_to.buildAction(direction));
+                nextAction.add(Scout.buildAction(direction));
+                update(direction);
+
+            } else {
+                this.onBiome = false;
+                reset();
+                if (reverse) {
+                    end = true;
+                } else {
+                    reverse = true;
+                    update(Direction.W);
+                }
+            }
+
+        }
+        return this.nextAction;
+    }
+
+    public void increment() {
+        outOfBiomeCounter++;
+    }
+
+    public void reset() {
+        outOfBiomeCounter = 0;
     }
 }

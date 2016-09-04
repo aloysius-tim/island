@@ -17,6 +17,7 @@ public class Week47 {
                 .collecting(300,  "QUARTZ")
                 .collecting(10,   "FLOWER")
                 .storingInto("src/test/java/launchTests/outputs/week47")
+                .silentMode()
                 .fire();
     }
 }
